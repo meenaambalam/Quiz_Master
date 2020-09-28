@@ -185,6 +185,12 @@ function captureAnswer() {
 
 // Listner for Submit button - still figuring out
 document.body.addEventListener ('click', function(event){
+
+    var resultsArr = [
+        {name : "",
+        userChoice : ""}
+    ];
+        
     
     event.stopPropagation();
     if (event.target.id === "submitBtn") {
@@ -194,9 +200,13 @@ document.body.addEventListener ('click', function(event){
         var selectedRadio = document.querySelectorAll(".radioBtn");
 
         for (let i = 0; i < selectedRadio.length; i++) {
-            var radioValue = selectedRadio.item(i).value;
-            var radioChecked = selectedRadio.item(i).checked;
-            console.log("radio value and checked flag: " + radioValue + ":" + radioChecked);
+            //NEEDS WORK ON THIS - Meena
+            if (selectedRadio.item(i).checked) {
+                resultsArr[0].name = selectedRadio.item(i).name;
+                resultsArr[0].usrChoice = selectedRadio.item(i).value;
+                resultsArr.push();
+                localStorage.setItem("userChoice",resultsArr);
+            }
             
         }
     }
