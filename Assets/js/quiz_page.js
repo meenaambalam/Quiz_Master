@@ -31,7 +31,7 @@ var quizForm = document.createElement("form");
 var quizInput = document.createElement("input");
 quizInput.setAttribute('type', 'radio');
 
-
+var birdResults = ["Peacock", "Cardinal", ""]
 
 //set other variables
 var quizTime = 5000; //5secs
@@ -48,28 +48,28 @@ birdQuiz.addEventListener("click", function(event){
     event.preventDefault();
     //add bird quiz image questions to the local storage
     var birdQuiz_Data = [
-        {name : "peacock" ,
+        {name : "Peacock" ,
         img_src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Peacock_by_Nihal_jabin.jpg/220px-Peacock_by_Nihal_jabin.jpg',
         choices: ["Cuckoo", "Parrot", "Peacock", "Crow", "Toucan"],
-        ansIndex: 2
+        quesNum: 1
         },
-        {name : "cardinal", 
+        {name : "Cardinal", 
         img_src: "https://indianaaudubon.org/wp-content/uploads/2016/04/Cardinal_Northern_male_Ash_2012.jpg",
         choices: ["Humming Bird", "Iiwi", "Flamingo","Cardinal"],
-        ansIndex: 3
+        quesNum: 2
         },
-        {name : "hummingbird", 
+        {name : "Hummingbird", 
         img_src: "https://www.capeandislands.org/sites/wcai/files/styles/medium/public/201604/Broad-Billed_Hummingbird_003.jpg",
         choices: ["Hummingbird", "Heron", "Hummingbird", "Red-billed oxpecker","NewZeanland Kaka"],
-        ansIndex: 0},
-        {name : "blue jay",
+        quesNum: 3},
+        {name : "Blue Jay",
         img_src: "https://www.allaboutbirds.org/guide/assets/og/75265841-1200px.jpg",
         choices: ["Kori Bustard", "Blue Jay", "Hoary Puffleg"],
-        ansIndex: 1},
-        {name : "kingfisher",
+        quesNum: 4},
+        {name : "KingFisher",
         img_src: "https://cdn.download.ams.birds.cornell.edu/api/v1/asset/146286731/1800",
         choices: ["Kakapo", "Hoatzin", "California Condor", "Dodo", "KingFisher"],
-        ansIndex: 4}
+        quesNum: 5}
     ]
 
     localStorage.setItem("quizData", JSON.stringify(birdQuiz_Data));
@@ -83,7 +83,30 @@ birdQuiz.addEventListener("click", function(event){
     //quizImage.setAttribute("src", birdImg_Src[0].img_src);
     return;
 });
- 
+
+
+/* Code to remove elements in a recurrsive manner, so that the next questions and choices can be displayed in the same area without appending questions after previous questions */
+/* recursive element cleaning code copied from stackoverflow */
+function clearInner(node) {
+    while (node.hasChildNodes()) {
+      clear(node.firstChild);
+    }
+}
+
+function clear(node) {
+    while (node.hasChildNodes()) {
+      clear(node.firstChild);
+    }
+    node.parentNode.removeChild(node);
+    console.log(node, "cleared!");
+}
+
+function removeContentElements(quizData){
+    var parent = quizContent;
+    clearInner(parent);
+}
+
+/**/
 function addChoiceElements(quizData){
     
     var brTag;
@@ -92,8 +115,13 @@ function addChoiceElements(quizData){
     var description;
     var quizSubmit;
     var parent = quizContent;
+    var quizQues = document.createElement("h6");
+    quizQues.id = "quesNum";
     var quizForm = document.createElement("form");
     quizForm.id = "formChoices";
+
+    quizQues.innerHTML = quizData.quesNum + ". Choose the best answer that matches to the above picture?";
+    parent.appendChild(quizQues);
 
     parent.appendChild(quizForm);
     for (let i = 0; i < quizData.choices.length; i++) {
@@ -105,7 +133,7 @@ function addChoiceElements(quizData){
         quizRadio.id = quizData.choices[i];
         quizRadio.name = quizData.name;
         quizRadio.value = quizData.choices[i];
-        if (i==0) {quizRadio.checked = true};
+        if (i==0) {quizRadio.checked = true}; //just setting the first radio button to true as default setting
         quizLabel = document.createElement("label");
         quizLabel.htmlFor = quizData.name;
 
@@ -129,14 +157,25 @@ function addChoiceElements(quizData){
     //quizSubmit.onsubmit = submitBtnEvent();
 }
 
-function showQuiz(index, quizData) {
+function showQuiz(quizData) {
     //var quizData = JSON.parse(localStorage.getItem("quizData"));
     //var startIndx = 0;
-    console.log(quizData);
+
+    console.log("in showquiz function: " + quizData);
+    quizImage.setAttribute("src", quizData.img_src);
+    //getquizForm = 
+    removeContentElements(quizData);
+    addChoiceElements(quizData);
+    return;
+
+    /*
+
+    console.log("in showquiz function: " + quizData);
     quizImage.setAttribute("src", quizData[index].img_src);
     //getquizForm = 
     addChoiceElements(quizData[index]);
     return;
+    */
 }
  
 function disableBtnChoices() {
@@ -160,8 +199,9 @@ startQuiz.addEventListener("click", function(event){
     //getquizForm = 
     var startIndx = 0;
     var quizData = JSON.parse(localStorage.getItem("quizData"));
+    console.log("quiData [0]: " + quizData[0].name + "/" + quizData[0].ansIndex);
     //getQuizResults = 
-    showQuiz(startIndx, quizData);
+    showQuiz(quizData[startIndx]);
     return;
 })
 
@@ -179,36 +219,47 @@ function setTime() {
 }
 
 //defining event for the dynamically created submit button
-function captureAnswer() {  
-    alert("running submitProcess function");
+function  subtractTimer() {  
+    alert("running subtractTimer function");
+    quiztime =- 100;
+    alert("subtracted 100ms from quiztime");
 }
 
 // Listner for Submit button - still figuring out
 document.body.addEventListener ('click', function(event){
-
-    var resultsArr = [
-        {name : "",
-        userChoice : ""}
-    ];
-        
     
     event.stopPropagation();
+
     if (event.target.id === "submitBtn") {
-        alert ("document.body.subMt event running");
+        var correctAnswer = false;
+        var penaltyTime = 100;
+        var quesLabel = document.getElementById("quesNum").textContent;
+        var quesIndx = quesLabel.split('.').shift();
+                
         event.preventDefault();
+
+        console.log("nextQuestion Index: " + quesIndx);
         
         var selectedRadio = document.querySelectorAll(".radioBtn");
 
         for (let i = 0; i < selectedRadio.length; i++) {
-            //NEEDS WORK ON THIS - Meena
-            if (selectedRadio.item(i).checked) {
-                resultsArr[0].name = selectedRadio.item(i).name;
-                resultsArr[0].usrChoice = selectedRadio.item(i).value;
-                resultsArr.push();
-                localStorage.setItem("userChoice",resultsArr);
-            }
-            
+            if (selectedRadio.item(i).checked && (selectedRadio.item(i).name === selectedRadio.item(i).value)) {
+                correctAnswer = true;
+            }            
         }
+        if (!correctAnswer) {
+            quiztime =- penaltyTime;
+            timerSpan.innerHTML="Time Left: " + quizTime;
+        }
+    
+        var quizData = JSON.parse(localStorage.getItem("quizData"));
+        console.log("quiData [0]: " + quizData[0].name + "/" + quizData[0].ansIndex);
+        if(quesIndx <= quizData.length){
+            showQuiz(quizData[quesIndx]);
+        } else{
+            location.href = "https://meenaambalam.github.io/Password_Generator/"
+        }
+
     }
 })
 
