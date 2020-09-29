@@ -12,15 +12,8 @@ var quizDisplay = document.querySelector(".quizDisplay");
 var quizImage = document.querySelector(".quizImage");
 var quizContent = document.querySelector(".quizContent");
 var startButton = document.querySelector(".startButton");
-var buttonResults;
 
 //create label element for displaying the timer
-var quizTime = 75;
-var timeInterval;
-var quizType;
-var highScore;
-
-
 var timerPara = document.createElement("p");
 var timerSpan = document.createElement("span");
 timerSpan.innerHTML = "";
@@ -28,24 +21,47 @@ startButton.appendChild(timerPara);
 //startButton.appendChild(timerSpan);
 timerPara.appendChild(timerSpan);
 startButton.firstElementChild.insertAdjacentElement;
-
+//startButton.lastElementChild.insertAdjacentElement;
+//startButton.insertBefore(timerPara, startButton.childNodes[1]);
+//timerPara.insertBefore();
 
 //Create base elements to show the quiz choices
 
 var quizForm = document.createElement("form");
 var quizInput = document.createElement("input");
-quizInput.setAttribute('type', 'button');
+quizInput.setAttribute('type', 'radio');
+
+
+//set other variables
+var quizTime = 5000; //5secs
+
+var highScore = [
+    {type : "bird",
+    highScore: 0,
+    initials: ""},
+    {type : "animal",
+    highScore: 0,
+    initials: ""},
+    {type : "color",
+    highScore: 0,
+    initials: ""},
+    {type : "number",
+    highScore: 0,
+    initials: ""}
+];
 
 
 //Makes the start Quiz Div & button visible when the main quiz type is clicked
 function showStartQuizBtn(){
+    //var startButton = document.querySelector(".startButton");
     startButton.style.visibility = "visible";
+    return;
 }
 
 birdQuiz.addEventListener("click", function(event){
+    console.log("birdQuiz button pressed");
     event.preventDefault();
-    
-    quizType = "bird";
+ 
     //add bird quiz image questions to the local storage
     var birdQuiz_Data = [
         {name : "Peacock" ,
@@ -72,22 +88,34 @@ birdQuiz.addEventListener("click", function(event){
         quesNum: 5}
     ]
 
-    highScore = {
+    var bird_highScore = {
         type : "bird",
         highScore: 0,
         initials: ""
     }
 
     localStorage.setItem("quizData", JSON.stringify(birdQuiz_Data));
-    localStorage.setItem("highScore", JSON.stringify(highScore));
+    localStorage.setItem("birdScore", JSON.stringify(bird_highScore));
+    localStorage.setItem("quizChoice", "bird");
     
     showStartQuizBtn();
+    //startButton.style.visibility = "visible";
+    //startButton.setAttribute("visibility",visible);
 
+    //TIMER BEFORE POPULATING THE 
+
+    //quizImage.setAttribute("src", birdImg_Src[0].img_src);
+    return;
 });
 
 
 /* Code to remove elements in a recurrsive manner, so that the next questions and choices can be displayed in the same area without appending questions after previous questions */
 /* recursive element cleaning code copied from stackoverflow */
+function clearInner(node) {
+    while (node.hasChildNodes()) {
+      clear(node.firstChild);
+    }
+}
 
 function clear(node) {
     while (node.hasChildNodes()) {
@@ -97,12 +125,6 @@ function clear(node) {
     console.log(node, "cleared!");
 }
 
-function clearInner(node) {
-    while (node.hasChildNodes()) {
-      clear(node.firstChild);
-    }
-}
-
 function removeContentElements(quizData){
     var parent = quizContent;
     clearInner(parent);
@@ -110,37 +132,74 @@ function removeContentElements(quizData){
 
 /**/
 function addChoiceElements(quizData){
+    
     var brTag;
-    var quizButton;
+    var quizRadio;
+    var quizLabel;
+    var description;
+    var quizSubmit;
     var parent = quizContent;
     var quizQues = document.createElement("h6");
-    var quizForm = document.createElement("form");
-
     quizQues.id = "quesNum";
+    var quizForm = document.createElement("form");
     quizForm.id = "formChoices";
+
     quizQues.innerHTML = quizData.quesNum + ". Choose the best answer that matches to the above picture?";
     parent.appendChild(quizQues);
 
     parent.appendChild(quizForm);
     for (let i = 0; i < quizData.choices.length; i++) {
 
-        quizButton = document.createElement("input");
-        quizButton.type = "button";
-        quizButton.className = "buttonResults";
-        quizButton.id = quizData.choices[i];
-        quizButton.name = quizData.name;
-        quizButton.value = quizData.choices[i];
+        quizRadio = document.createElement("input");
+        quizRadio.type = "radio";
+        //quizRadio.id = quizData.name;
+        quizRadio.className = "radioBtn";
+        quizRadio.id = quizData.choices[i];
+        quizRadio.name = quizData.name;
+        quizRadio.value = quizData.choices[i];
+        if (i==0) {quizRadio.checked = true}; //just setting the first radio button to true as default setting
+        quizLabel = document.createElement("label");
+        quizLabel.htmlFor = quizData.name;
+
+        description = document.createTextNode(quizData.choices[i]);
+        quizLabel.appendChild(description);
+
         brTag = document.createElement("br");
-        quizForm.appendChild(quizButton);
+        quizForm.appendChild(quizRadio);
+        quizForm.appendChild(quizLabel);
         quizForm.appendChild(brTag);
-    }  
+    }
+
+    quizSubmit = document.createElement("input");
+    quizSubmit.type = "submit";
+    quizSubmit.id = "submitBtn";
+    quizSubmit.value = "Submit";
+
+    quizForm.appendChild(quizSubmit);
+    return;
+
+    //quizSubmit.onsubmit = submitBtnEvent();
 }
 
 function showQuiz(quizData) {
-    quizImage.setAttribute("src", quizData.img_src);
+    //var quizData = JSON.parse(localStorage.getItem("quizData"));
+    //var startIndx = 0;
 
+    console.log("in showquiz function: " + quizData);
+    quizImage.setAttribute("src", quizData.img_src);
+    //getquizForm = 
     removeContentElements(quizData);
     addChoiceElements(quizData);
+    return;
+
+    /*
+
+    console.log("in showquiz function: " + quizData);
+    quizImage.setAttribute("src", quizData[index].img_src);
+    //getquizForm = 
+    addChoiceElements(quizData[index]);
+    return;
+    */
 }
  
 function disableBtnChoices() {
@@ -153,30 +212,24 @@ function disableBtnChoices() {
 
 startQuiz.addEventListener("click", function(event){
     //start the timer
-    timeInterval = setInterval(myTimer, 1000);
     var index = 0;
     console.log ("starting timer");
     startQuiz.value = "Quiz Started!";
     disableBtnChoices();
-    //setTime();
+    //startQuiz.setAttribute(button, "disabled");
+    //startButton.style.visibility = "hidden";
+    //quizImage.setAttribute("src", birdImg_Src[0].img_src);
+    setTime();
+    //getquizForm = 
     var startIndx = 0;
     var quizData = JSON.parse(localStorage.getItem("quizData"));
-    
-    //myTimer();
+    console.log("quiData [0]: " + quizData[0].name + "/" + quizData[0].ansIndex);
+    //getQuizResults = 
     showQuiz(quizData[startIndx]);
+    return;
 })
 
 
-function myTimer(){
-    quizTime--;
-        timerSpan.innerHTML="Time Left: " + quizTime;
-        if (quizTime === 0) {
-            clearInterval(timeInterval);
-            console.log("Timer Complete:");
-        }
-}
-
-/*
 function setTime() {
     console.log(document);
     var timeInterval = setInterval(function() {
@@ -186,9 +239,9 @@ function setTime() {
             clearInterval(timeInterval);
             console.log("Timer Complete:");
         }
-    }, 1000)
+    }, 100)
 }
-*/
+
 
 //MEENA --------Need to WORK here -----------------
 //defining event for the dynamically created submit button
@@ -198,38 +251,46 @@ function  updateScore(quizChoice, quizTime) {
         if (highScore.item[i].name === quizChoice){
             highScore.item[i].highScore
         }
-        }
+        
+    }
 
-}
+
 
 // Listner for Submit button - still figuring out
-
 document.body.addEventListener ('click', function(event){
+    
     event.stopPropagation();
-    if (event.target.className == "buttonResults") {
-        event.preventDefault();
 
-        var penaltyTime = 10;
+    if (event.target.id === "submitBtn") {
+        var correctAnswer = false;
+        var penaltyTime = 100;
         var quesLabel = document.getElementById("quesNum").textContent;
         var quesIndx = quesLabel.split('.').shift();
-        //event.preventDefault();
+                
+        event.preventDefault();
 
-        var selectedButtonId = event.target.id;
-        var selectedButtonName = event.target.name;
-        var selectedButtonValue = event.target.value;
+        console.log("nextQuestion Index: " + quesIndx);
+        
+        var selectedRadio = document.querySelectorAll(".radioBtn");
+
+        for (let i = 0; i < selectedRadio.length; i++) {
+            if (selectedRadio.item(i).checked && (selectedRadio.item(i).name === selectedRadio.item(i).value)) {
+                correctAnswer = true;
+            }            
+        }
+        if (!correctAnswer) {
+            quiztime =- penaltyTime;
+            timerSpan.innerHTML="Time Left: " + quizTime;
+        }
         var quizData = JSON.parse(localStorage.getItem("quizData"));
-       
-        if (selectedButtonName != selectedButtonValue) {
-            quizTime -= penaltyTime;
-        }   
-
         if(quesIndx < quizData.length){
             showQuiz(quizData[quesIndx]);
         } else{
-        clearInterval(timeInterval);
-
-            updateScore(quizChoice, quizTime);
+            var quizChoice = localStorage.getItem("quizChoice");
+            updateScore(quizChoice, quiztime);
             location.href = "https://meenaambalam.github.io/Password_Generator/"
         }
+
     }
 })
+
