@@ -31,10 +31,25 @@ var quizForm = document.createElement("form");
 var quizInput = document.createElement("input");
 quizInput.setAttribute('type', 'radio');
 
-var birdResults = ["Peacock", "Cardinal", ""]
 
 //set other variables
 var quizTime = 5000; //5secs
+
+var highScore = [
+    {type : "bird",
+    highScore: 0,
+    initials: ""},
+    {type : "animal",
+    highScore: 0,
+    initials: ""},
+    {type : "color",
+    highScore: 0,
+    initials: ""},
+    {type : "number",
+    highScore: 0,
+    initials: ""}
+];
+
 
 //Makes the start Quiz Div & button visible when the main quiz type is clicked
 function showStartQuizBtn(){
@@ -46,6 +61,7 @@ function showStartQuizBtn(){
 birdQuiz.addEventListener("click", function(event){
     console.log("birdQuiz button pressed");
     event.preventDefault();
+ 
     //add bird quiz image questions to the local storage
     var birdQuiz_Data = [
         {name : "Peacock" ,
@@ -72,7 +88,15 @@ birdQuiz.addEventListener("click", function(event){
         quesNum: 5}
     ]
 
+    var bird_highScore = {
+        type : "bird",
+        highScore: 0,
+        initials: ""
+    }
+
     localStorage.setItem("quizData", JSON.stringify(birdQuiz_Data));
+    localStorage.setItem("birdScore", JSON.stringify(bird_highScore));
+    localStorage.setItem("quizChoice", "bird");
     
     showStartQuizBtn();
     //startButton.style.visibility = "visible";
@@ -218,12 +242,19 @@ function setTime() {
     }, 100)
 }
 
+
+//MEENA --------Need to WORK here -----------------
 //defining event for the dynamically created submit button
-function  subtractTimer() {  
-    alert("running subtractTimer function");
-    quiztime =- 100;
-    alert("subtracted 100ms from quiztime");
-}
+function  updateScore(quizChoice, quizTime) {  
+    var highScore = JSON.parse(localStorage.getItem("quizData"));
+    for (let i = 0; i < highScore.length; i++) {
+        if (highScore.item[i].name === quizChoice){
+            highScore.item[i].highScore
+        }
+        
+    }
+
+
 
 // Listner for Submit button - still figuring out
 document.body.addEventListener ('click', function(event){
@@ -251,12 +282,12 @@ document.body.addEventListener ('click', function(event){
             quiztime =- penaltyTime;
             timerSpan.innerHTML="Time Left: " + quizTime;
         }
-    
         var quizData = JSON.parse(localStorage.getItem("quizData"));
-        console.log("quiData [0]: " + quizData[0].name + "/" + quizData[0].ansIndex);
-        if(quesIndx <= quizData.length){
+        if(quesIndx < quizData.length){
             showQuiz(quizData[quesIndx]);
         } else{
+            var quizChoice = localStorage.getItem("quizChoice");
+            updateScore(quizChoice, quiztime);
             location.href = "https://meenaambalam.github.io/Password_Generator/"
         }
 
