@@ -94,7 +94,7 @@ function clear(node) {
       clear(node.firstChild);
     }
     node.parentNode.removeChild(node);
-    console.log(node, "cleared!");
+    //console.log(node, "cleared!");
 }
 
 function clearInner(node) {
@@ -155,7 +155,6 @@ startQuiz.addEventListener("click", function(event){
     //start the timer
     timeInterval = setInterval(myTimer, 1000);
     var index = 0;
-    console.log ("starting timer");
     startQuiz.value = "Quiz Started!";
     disableBtnChoices();
     //setTime();
@@ -172,23 +171,10 @@ function myTimer(){
         timerSpan.innerHTML="Time Left: " + quizTime;
         if (quizTime === 0) {
             clearInterval(timeInterval);
-            console.log("Timer Complete:");
+            //console.log("Timer Complete:");
         }
 }
 
-/*
-function setTime() {
-    console.log(document);
-    var timeInterval = setInterval(function() {
-        quizTime--;
-        timerSpan.innerHTML="Time Left: " + quizTime;
-        if (quizTime === 0) {
-            clearInterval(timeInterval);
-            console.log("Timer Complete:");
-        }
-    }, 1000)
-}
-*/
 
 //MEENA --------Need to WORK here -----------------
 //defining event for the dynamically created submit button
@@ -200,6 +186,50 @@ function  updateScore(quizChoice, quizTime) {
         }
         }
 
+}
+
+//final score page
+
+/**/
+function addScoreElements(){
+    var brTag;
+    var quizButton;
+    var parent = quizContent;
+    var quizQues = document.createElement("h6");
+    var quizForm = document.createElement("form");
+
+    quizQues.id = "quesNum";
+    quizForm.id = "formChoices";
+    quizQues.innerHTML = "Please enter your initials to save the highscore!";
+    parent.appendChild(quizQues);
+    parent.appendChild(quizForm);
+    
+    quizButton = document.createElement("input");
+    quizButton.type = "text";
+    quizButton.className = "textInitials";
+    quizButton.id = "textInitials";
+    quizButton.name = "initials";
+    quizButton.value = ""
+    brTag = document.createElement("br");
+    quizForm.appendChild(quizButton);
+   // quizForm.appendChild(brTag);
+
+    quizButton = document.createElement("input");
+    quizButton.type = "button";
+    quizButton.className = "saveScore";
+    quizButton.id = "saveScores";
+    quizButton.name = "saveScore";
+    quizButton.value = "SAVE"
+    brTag = document.createElement("br");
+    quizForm.appendChild(quizButton);
+    quizForm.appendChild(brTag);
+}
+
+function showFinalPage(quizData, timeLeft) {
+    quizImage.setAttribute("src", "./Assets/WellDone.png");
+    clearInterval(timeInterval);
+    removeContentElements(quizData);
+    addScoreElements(timeLeft);
 }
 
 // Listner for Submit button - still figuring out
@@ -219,17 +249,27 @@ document.body.addEventListener ('click', function(event){
         var selectedButtonValue = event.target.value;
         var quizData = JSON.parse(localStorage.getItem("quizData"));
        
-        if (selectedButtonName != selectedButtonValue) {
-            quizTime -= penaltyTime;
-        }   
-
-        if(quesIndx < quizData.length){
+        //alert("quesIndx: " + quesIndx + " Length: " + quizData.length);
+        if (quesIndx < quizData.length){
+                    //alert("selected Button Name: " + selectedButtonName + " Value: " + selectedButtonValue);
+            if (selectedButtonName != selectedButtonValue) {
+                quizTime -= penaltyTime;
+            }  
             showQuiz(quizData[quesIndx]);
-        } else{
-        clearInterval(timeInterval);
+        } else if (quesIndx == quizData.length) {
+                    //alert("selected Button Name: " + selectedButtonName + " Value: " + selectedButtonValue);
+            if (selectedButtonName != selectedButtonValue) {
+                quizTime -= penaltyTime;
+            } 
 
-            updateScore(quizChoice, quizTime);
-            location.href = "https://meenaambalam.github.io/Password_Generator/"
+            showFinalPage(quizData,quizTime);
+            
+            //https://previews.123rf.com/images/hamzaali01/hamzaali011705/hamzaali01170500566/78587830-well-done-letters-vector-word-banner-sign.jpg
+
+            //clearInterval(timeInterval);
         }
+
+            //updateScore(quizChoice, quizTime);
+            //location.href = "https://meenaambalam.github.io/Password_Generator/"
     }
 })
