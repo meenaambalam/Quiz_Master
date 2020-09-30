@@ -34,10 +34,10 @@ This will be a good learning app for young kids.
 
 The following Screenshots demonstrates the application functionality:
 
-![Initial Load](./Assets/Quiz_Master_ScreenShot_1.png.png)
-![click a Quiz Challenge Type](./Assets/Quiz_Master_ScreenShot_2.png.png)
-![When the Quiz is actually Started](./Assets/Quiz_Master_ScreenShot_3.png.png)
-![End of the Quiz](./Assets/Quiz_Master_ScreenShot_4.png.png)
+(./Assets/Quiz_Master_ScreenShot_1.png.png)
+(./Assets/Quiz_Master_ScreenShot_2.png.png)
+(./Assets/Quiz_Master_ScreenShot_3.png.png)
+(./Assets/Quiz_Master_ScreenShot_4.png.png)
 
 
 ## Tools and Techniques used
