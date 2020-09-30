@@ -25,6 +25,7 @@
 </head>
 
 <body>
+    <!--Container-->
     <div class="container">
         <div class="mainBox">
             <div class="row">
@@ -42,13 +43,13 @@
             </div>
             <div class="row divQuizTypes ">
                 <div class="col-lg-3 animalQuiz divQuizBtns">
-                    <input class="clsBtns" id="animalQuiz" type="button" value="Don't Click">
+                    <input class="clsBtns" id="animalQuiz" type="button" value="For Future">
                 </div>
                 <div class="col-lg-3 colorQuiz divQuizBtns">
-                    <input class="clsBtns" id="colorQuiz" type="button" value="Don't Click">
+                    <input class="clsBtns" id="colorQuiz" type="button" value="For Future">
                 </div>
                 <div class="col-lg-3 numberQuiz divQuizBtns">
-                    <input class="clsBtns" id="numberQuiz" type="button" value="Don't Click">
+                    <input class="clsBtns" id="numberQuiz" type="button" value="For Future">
                 </div>
                 <div class="col-lg-3 birdQuiz divQuizBtns">
                     <input class="clsBtns" id="birdQuiz" type="button" value="Bird Quiz">
@@ -58,6 +59,7 @@
             <hr>
 
             <div class="row divQuizMain">
+                <!--section that will show the high score value and option to clear score-->
                 <div class="col-lg-4 quizHighScore headingRow">
                     <h5 class="hideInitial">Score Board</h5>
                     <p></p>
@@ -73,9 +75,10 @@
                             <th><input class="clearScore" id="birdClr" type="button" name="clearScore" value="Clear Score"></th>
                         </tr>
                     </table>                  
-                    <input class="clsBtns hideInitial" type="button" name="startOver" value="Start Over">
+                    <input class="startOver clsBtns hideInitial" type="button" name="startOver" value="Start Over">
 
                 </div>
+                <!--Section that will show the welcome page and will show the quiz pictuers-->
                 <div class="col-lg-4 quizDisplay">
                     <img class="quizImage" src="./Assets/WelcomeToMyPage.png" alt="Quiz Image" width=100% height=300>
                 </div>
@@ -84,10 +87,12 @@
                 </div>
             </div>
             <hr>
+            <!-- section where the quiz questions will be shown -->
             <div class="row divNavigation">
                 <div class="col-lg-4">
                     <p></p>
                 </div>
+                <!--section where the dynamic elements will be build on the fly -->
                 <div class="col-lg-4 quizOptions text-center">
                     <div class="quizContent">
                     </div>
@@ -96,12 +101,14 @@
                     <p></p>
                 </div>
             </div>
+            <!-- footer-->
             <div class="row footer">
                 <div class="col-lg-12">
                     <p><span>Copyright 2020</span></p>
                 </div>
             </div>
         </div>
+        <!--link to Javascript code-->
         <script src="./Assets/js/quiz_page.js"></script>
     </div>
 </body>

@@ -19,22 +19,25 @@ var buttonResults;
 var quizTime = 75;
 var timeInterval;
 
-// 
+//initial localstorage for highscore value
 var quizType;
-var highScore;
-
 var highScore = {
-    type : "bird",
-    highScore: 0,
-    initials: ""
+        type : "bird",
+        highScore: 0,
+        initials: ""
 }
+localStorage.setItem("highScore", JSON.stringify(highScore));
 
-//
+        // highestScore = JSON.parse(localStorage.getItem("highScore"));
+        // document.getElementById("birdScore").textContent = highestScore.highScore + " - " + highestScore.initials;
+
+
+
+// create elements dynamically
 var timerPara = document.createElement("p");
 var timerSpan = document.createElement("span");
 timerSpan.innerHTML = "";
 startButton.appendChild(timerPara);
-//startButton.appendChild(timerSpan);
 timerPara.appendChild(timerSpan);
 startButton.firstElementChild.insertAdjacentElement;
 
@@ -49,10 +52,10 @@ quizInput.setAttribute('type', 'button');
 //Makes the start Quiz Div & button visible when the main quiz type is clicked
 function showStartQuizBtn(){
     startButton.style.visibility = "visible";
-    var highestScore = JSON.parse(localStorage.getItem("highScore"));
-    document.getElementById("birdScore").innerHTML = highestScore.highScore + " - " + highestScore.initials;
+
 }
 
+// Event Listner for the "bird quiz" type "click" event
 birdQuiz.addEventListener("click", function(event){
     event.preventDefault();
     
@@ -90,8 +93,6 @@ birdQuiz.addEventListener("click", function(event){
     ]
 
     localStorage.setItem("quizData", JSON.stringify(birdQuiz_Data));
-    localStorage.setItem("highScore", JSON.stringify(highScore));
-    
     showStartQuizBtn();
 
 });
@@ -119,7 +120,7 @@ function removeContentElements(quizData){
     clearInner(parent);
 }
 
-/**/
+/*Get the question object from local storage and display the choices in the screen by creating the appropriate elements dynamically*/
 function addChoiceElements(quizData){
     var brTag;
     var quizButton;
@@ -148,13 +149,15 @@ function addChoiceElements(quizData){
     }  
 }
 
+// Function to show the Quiz. Remove the elements before adding the elements dynamically
 function showQuiz(quizData) {
     quizImage.setAttribute("src", quizData.img_src);
 
     removeContentElements(quizData);
     addChoiceElements(quizData);
 }
- 
+
+// When the actual "Start Quiz" is pressed, disable other quiz category buttons, to avoid them being pressed.
 function disableBtnChoices() {
     startQuiz.disabled = true;
     animalQuiz.disabled = true;
@@ -163,17 +166,16 @@ function disableBtnChoices() {
     numberQuiz.disabled = true;
 }
 
+// Eventlistner on "Start Quiz" button click event
 startQuiz.addEventListener("click", function(event){
     //start the timer
     timeInterval = setInterval(myTimer, 1000);
     var index = 0;
     startQuiz.value = "Quiz Started!";
     disableBtnChoices();
-    //setTime();
     var startIndx = 0;
     var quizData = JSON.parse(localStorage.getItem("quizData"));
-    
-    //myTimer();
+
     showQuiz(quizData[startIndx]);
 })
 
@@ -188,19 +190,7 @@ function myTimer(){
 }
 
 
-//defining event for the dynamically created submit button
-function  updateScore(quizChoice, quizTime) {  
-    var highScore = JSON.parse(localStorage.getItem("quizData"));
-    for (let i = 0; i < highScore.length; i++) {
-        if (highScore.item[i].name === quizChoice){
-            highScore.item[i].highScore
-        }
-        }
-
-}
-
-//final score page
-
+//final page to get the initials from the user to save the score
 function addScoreElements(){
     var brTag;
     var quizButton;
@@ -233,11 +223,9 @@ function addScoreElements(){
     brTag = document.createElement("br");
     quizForm.appendChild(quizButton);
     quizForm.appendChild(brTag);
-    //uizButton.focus = true;
-
-
 }
 
+// Dynamically change the pictures and clean up the dynamically built quiz elements, and show signs that Quiz is complete
 function showFinalPage(quizData, timeLeft) {
     quizImage.setAttribute("src", "./Assets/WellDone.png");
     startQuiz.value = "Quiz Ended!";
@@ -276,25 +264,19 @@ document.body.addEventListener ('click', function(event){
             if (selectedButtonName != selectedButtonValue) {
                 quizTime -= penaltyTime;
             } 
-
             showFinalPage(quizData,quizTime);
-            
-            //https://previews.123rf.com/images/hamzaali01/hamzaali011705/hamzaali01170500566/78587830-well-done-letters-vector-word-banner-sign.jpg
-
-            //clearInterval(timeInterval);
         }
 
-            //updateScore(quizChoice, quizTime);
-            //location.href = "https://meenaambalam.github.io/Password_Generator/"
     }
 
-    //listen for saving the score
+    //listener for saving the score
     if (event.target.className == "saveScore"){
-        alert("SAve clicked");
         var bestScore;
         var bestScorer;
+
+        /*
         var currentScore = quizTime;
-        var currentInit = document.getElementById("textInitials").value;;
+        var currentInit = document.getElementById("textInitials").value;
         var highestScore = JSON.parse(localStorage.getItem("highScore"));
         
         if (currentScore > highestScore.highScore) {
@@ -308,16 +290,19 @@ document.body.addEventListener ('click', function(event){
         highScore.type = "bird";
         highScore.highScore = bestScore;
         highScore.initials = bestScorer;
+
+        */
+
+        highScore.type = "bird";
+        highScore.highScore = quizTime;
+        highScore.initials = document.getElementById("textInitials").value;
         localStorage.setItem("highScore", JSON.stringify(highScore));
 
-        document.getElementById("birdScore").innerHTML = currentScore + " - " + currentInit;
-
-
+        document.getElementById("birdScore").innerHTML = quizTime + " - " + document.getElementById("textInitials").value;
     }
 
     //clear Score when clicked
     if (event.target.className == "clearScore"){
-        alert("SAve clicked");
         highScore.type = "bird";
         highScore.highScore = 0;
         highScore.initials = "";
@@ -326,7 +311,8 @@ document.body.addEventListener ('click', function(event){
 
     //reload page when start over
     if (event.target.className == "startOver"){
-        location.reload();
+        alert("test start over");
+        window.location.reload();
     }
 })
 
