@@ -74,6 +74,24 @@ span {
     margin : 2px;
 }
 
+table, th, td {
+    border: 1px sold black;
+    border-style: outset;
+}
+th, td {
+    padding: 5px;
+    text-align: left;
+}
+
+/*
+.hideInitial{
+    display: none;
+}
+
+.changeDisplay{
+    display: inline;
+    background-color: wheat;
+}
 
 /*
 

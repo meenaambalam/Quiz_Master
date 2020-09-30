@@ -32,28 +32,23 @@
                     <h1><span>Quiz Master Game</span></h1>
                 </div>
             </div>
-            <hr>
-            <!--
-            <div class="row">
-                <div class="col-lg-12 hrLine">
 
-                </div>
-            </div>
-        -->
+            <hr>
+
             <div class="row">
                 <div class="col-lg-12 headingRow">
-                    <p><span> Click/Choose one of the below quiz categories!</span></p>
+                    <h5><span> Click/Choose one of the below quiz categories to play!</span></h5>
                 </div>
             </div>
             <div class="row divQuizTypes ">
                 <div class="col-lg-3 animalQuiz divQuizBtns">
-                    <input class="clsBtns" id="animalQuiz" type="button" value="Animal Quiz">
+                    <input class="clsBtns" id="animalQuiz" type="button" value="Don't Click">
                 </div>
                 <div class="col-lg-3 colorQuiz divQuizBtns">
-                    <input class="clsBtns" id="colorQuiz" type="button" value="Color Quiz">
+                    <input class="clsBtns" id="colorQuiz" type="button" value="Don't Click">
                 </div>
                 <div class="col-lg-3 numberQuiz divQuizBtns">
-                    <input class="clsBtns" id="numberQuiz" type="button" value="Number Quiz">
+                    <input class="clsBtns" id="numberQuiz" type="button" value="Don't Click">
                 </div>
                 <div class="col-lg-3 birdQuiz divQuizBtns">
                     <input class="clsBtns" id="birdQuiz" type="button" value="Bird Quiz">
@@ -61,15 +56,25 @@
             </div>
 
             <hr>
-            <!--
-            <div class="row">
-                <div class="col-lg-12 hrLine">
-                </div>
-            </div>
-        -->
 
             <div class="row divQuizMain">
-                <div class="col-lg-4">
+                <div class="col-lg-4 quizHighScore headingRow">
+                    <h5 class="hideInitial">Score Board</h5>
+                    <p></p>
+                    <table class="hideInitial" style="width:100%" >
+                        <tr>
+                            <th>Quiz Type</th>
+                            <th>HighScore</th>
+                            <th>ClearScore</th>
+                        </tr>
+                        <tr>
+                            <td>Bird Quiz</td>
+                            <td id="birdScore"></td>
+                            <th><input class="clearScore" id="birdClr" type="button" name="clearScore" value="Clear Score"></th>
+                        </tr>
+                    </table>                  
+                    <input class="clsBtns hideInitial" type="button" name="startOver" value="Start Over">
+
                 </div>
                 <div class="col-lg-4 quizDisplay">
                     <img class="quizImage" src="./Assets/WelcomeToMyPage.png" alt="Quiz Image" width=100% height=300>
@@ -79,12 +84,6 @@
                 </div>
             </div>
             <hr>
-            <!--
-            <div class="row">
-                <div class="col-lg-12 hrLine">
-                </div>
-            </div>
-        -->
             <div class="row divNavigation">
                 <div class="col-lg-4">
                     <p></p>

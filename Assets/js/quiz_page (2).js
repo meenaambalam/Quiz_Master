@@ -23,12 +23,6 @@ var timeInterval;
 var quizType;
 var highScore;
 
-var highScore = {
-    type : "bird",
-    highScore: 0,
-    initials: ""
-}
-
 //
 var timerPara = document.createElement("p");
 var timerSpan = document.createElement("span");
@@ -49,8 +43,6 @@ quizInput.setAttribute('type', 'button');
 //Makes the start Quiz Div & button visible when the main quiz type is clicked
 function showStartQuizBtn(){
     startButton.style.visibility = "visible";
-    var highestScore = JSON.parse(localStorage.getItem("highScore"));
-    document.getElementById("birdScore").innerHTML = highestScore.highScore + " - " + highestScore.initials;
 }
 
 birdQuiz.addEventListener("click", function(event){
@@ -88,6 +80,12 @@ birdQuiz.addEventListener("click", function(event){
         choices: ["Kakapo", "Hoatzin", "California Condor", "Dodo", "KingFisher"],
         quesNum: 5}
     ]
+
+    highScore = {
+        type : "bird",
+        highScore: 0,
+        initials: ""
+    }
 
     localStorage.setItem("quizData", JSON.stringify(birdQuiz_Data));
     localStorage.setItem("highScore", JSON.stringify(highScore));
@@ -177,7 +175,7 @@ startQuiz.addEventListener("click", function(event){
     showQuiz(quizData[startIndx]);
 })
 
-//Timer function
+
 function myTimer(){
     quizTime--;
         timerSpan.innerHTML="Time Left: " + quizTime;
@@ -188,6 +186,7 @@ function myTimer(){
 }
 
 
+//MEENA --------Need to WORK here -----------------
 //defining event for the dynamically created submit button
 function  updateScore(quizChoice, quizTime) {  
     var highScore = JSON.parse(localStorage.getItem("quizData"));
@@ -201,6 +200,7 @@ function  updateScore(quizChoice, quizTime) {
 
 //final score page
 
+/**/
 function addScoreElements(){
     var brTag;
     var quizButton;
@@ -239,6 +239,7 @@ function addScoreElements(){
 }
 
 function showFinalPage(quizData, timeLeft) {
+    //https://depositphotos.com/stock-photos/job-well-done.html?qview=16317151
     quizImage.setAttribute("src", "./Assets/WellDone.png");
     startQuiz.value = "Quiz Ended!";
     timerSpan.innerHTML="Your Final Score: " + quizTime;
@@ -247,8 +248,8 @@ function showFinalPage(quizData, timeLeft) {
     addScoreElements(timeLeft);
 }
 
-// Listener for various buttons on the screen
-//For the Answer Buttons
+// Listner for Submit button - still figuring out
+
 document.body.addEventListener ('click', function(event){
     event.stopPropagation();
     if (event.target.className == "buttonResults") {
@@ -288,45 +289,18 @@ document.body.addEventListener ('click', function(event){
             //location.href = "https://meenaambalam.github.io/Password_Generator/"
     }
 
-    //listen for saving the score
     if (event.target.className == "saveScore"){
         alert("SAve clicked");
-        var bestScore;
-        var bestScorer;
-        var currentScore = quizTime;
-        var currentInit = document.getElementById("textInitials").value;;
-        var highestScore = JSON.parse(localStorage.getItem("highScore"));
         
-        if (currentScore > highestScore.highScore) {
-            bestScore = currentScore
-            bestScorer = currentInit;
-        } else {
-            bestScore = highestScore.highScore;
-            bestScorer = highestScore.initials;
-        }
 
-        highScore.type = "bird";
-        highScore.highScore = bestScore;
-        highScore.initials = bestScorer;
-        localStorage.setItem("highScore", JSON.stringify(highScore));
-
-        document.getElementById("birdScore").innerHTML = currentScore + " - " + currentInit;
-
-
-    }
-
-    //clear Score when clicked
-    if (event.target.className == "clearScore"){
-        alert("SAve clicked");
-        highScore.type = "bird";
-        highScore.highScore = 0;
-        highScore.initials = "";
-        localStorage.setItem("highScore", JSON.stringify(highScore));
-    }
-
-    //reload page when start over
-    if (event.target.className == "startOver"){
-        location.reload();
+        /*
+        var hiddenScore = document.getElementsByClassName("hideInitial");
+        hiddenScore.classList.remove("hideInitial");
+        //hiddenScore.display = "inline";*/
     }
 })
 
+/*Show Highscore
+document.getElementById("saveScore").addEventListener("click", function(){
+    hiddenScoreElem.className = "showFinally";
+}) */
